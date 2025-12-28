@@ -1,0 +1,132 @@
+input: C:\Users\sande\Desktop\Projects\Personal\jnt\src\test\resources\combo.jar
+libraries: []
+
+compiler:
+  os: windows
+  arch: x86_64
+  version: 0.14.0
+
+targets:
+  - x86_64-windows
+
+debug:
+  compilation:
+    - x86_64-windows
+
+mutators:
+  metaphor:
+    exempt: {}
+    order:
+      - dot-graph
+      - inlining
+      - lift-constructors
+      - access-unify
+      - field-initialize
+      - internal-class-integrator
+      - unused-method-remover
+      - unused-class-remover
+      - renamer.method
+      - renamer.field
+      - renamer.class
+      - main-call-check
+      - call-graph
+      - method-integrity
+      - string.light
+      - string.poly
+      - flow.break
+      - flow.traps
+      - flow.flattening
+      - flow.shuffle
+      - flow.switch
+      - number.salt
+      - number.table
+      - ref
+      - lift-initializers
+      - watermark
+      - strip
+      - optimizer
+      - dot-graph
+      - indy-rewriter
+    transformers:
+      inlining:
+        enabled: false
+      lift-constructors:
+        enabled: false
+      optimizer:
+        enabled: false
+      unused-method-remover:
+        enabled: false
+      unused-class-remover:
+        enabled: false
+      internal-class-integrator:
+        enabled: false
+      access-unify:
+        enabled: false
+        exploit: false
+      field-initialize:
+        enabled: false
+      ref:
+        enabled: false
+      renamer:
+        method:
+          enabled: false
+          exempt:
+            - package: '*'
+              classes:
+                - class: '*'
+                  methods:
+                    - main([Ljava/lang/String;)V
+        field:
+          enabled: false
+        class:
+          enabled: false
+      main-call-check:
+        entry: 'dev/xyz/entrypoint/EntrypointKt'
+        enabled: false
+      call-graph:
+        enabled: false
+      method-integrity:
+        enabled: false
+      string:
+        poly:
+          enabled: false
+        light:
+          enabled: false
+      flow:
+        flattening:
+          enabled: false
+        shuffle:
+          enabled: false
+        switch:
+          enabled: false
+        traps:
+          enabled: false
+        break:
+          enabled: false
+      number:
+        salt:
+          enabled: false
+        table:
+          enabled: false
+      lift-initializers:
+        enabled: false
+      watermark:
+        enabled: false
+      strip:
+        enabled: false
+      dot-graph:
+        enabled: false
+      indy-rewriter:
+        enabled: false
+  jnt:
+    exempt:
+      - package: '*'
+    order:
+      - cleanup
+      - integrate
+    transformers:
+      cleanup:
+        enabled: true
+      integrate:
+        enabled: true
+    vm: false

@@ -1,0 +1,159 @@
+input: C:/Users/etho/git/test-suite/out/artifacts/test_suite_jar/test-suite.jar
+
+compiler:
+  os: windows
+  arch: x86_64
+  version: 0.15.2
+
+zig:
+  os: windows
+  arch: x86_64
+  version: 0.15.2
+  installation: zig
+
+targets:
+  - x86_64-windows
+  #- x86_64-linux
+
+debug:
+  compilation:
+    - x86_64-windows
+    #- x86_64-linux
+
+jnt-path: war/jnt
+mutators:
+  metaphor:
+    exempt:
+      - package: '*'
+        classes:
+          - class: 'so/jnt/suite/HashmapTest'
+    order:
+      - renamer.method
+      - renamer.field
+      - renamer.desc
+      - renamer.class
+      - ref
+      - mutilate-return
+      - splash-screen
+      - access-unify
+      - dot-graph
+      - inlining
+      - field-initialize
+      - lift-constructors
+      - internal-class-integrator
+      - unused-method-remover
+      - unused-class-remover
+      #      - main-call-check
+      #      - method-integrity
+      - string.light
+      - string.poly
+      - flow.break
+      - flow.traps
+      - flow.flattening
+      - flow.shuffle
+      - flow.switch
+      - number.salt
+      - number.table
+      - call-graph
+      - watermark
+      - strip
+      - optimizer
+      - dot-graph
+      - array-rewriter
+      - indy-rewriter
+    transformers:
+      mutilate-return:
+        enabled: false
+      splash-screen:
+        enabled: false
+      optimizer:
+        enabled: false
+      inlining:
+        enabled: false
+        debug: false
+        iterate: false
+        skip-transpiled-checks: false
+      field-initialize:
+        enabled: true
+      access-unify:
+        enabled: true
+        exploit: false
+      unused-method-remover:
+        enabled: false
+      unused-class-remover:
+        enabled: false
+      renamer:
+        method:
+          enabled: true
+        field:
+          enabled: true
+        desc:
+          enabled: false
+        class:
+          enabled: true
+      main-call-check:
+        entry: 'dev/xyz/entrypoint/EntrypointKt'
+        enabled: false
+      call-graph:
+        enabled: true
+      method-integrity:
+        enabled: false
+      string:
+        poly:
+          enabled: false
+        poly2:
+          enabled: false
+        light:
+          enabled: true
+      ref:
+        enabled: true
+      flow:
+        shuffle:
+          enabled: false
+        break:
+          enabled: false
+        traps:
+          enabled: true
+        flattening:
+          enabled: true
+        switch:
+          enabled: false
+        opaque:
+          enabled: true
+      number:
+        salt:
+          enabled: true
+          level: HIGH
+          skipBsm: true
+        table:
+          enabled: true
+      lift-constructors:
+        enabled: false
+      strip:
+        enabled: true
+      watermark:
+        enabled: true
+      array-rewriter:
+        enabled: true
+      indy-rewriter:
+        enabled: false
+      dot-graph:
+        enabled: false
+      exchange:
+        enabled: false
+      method-call-fix:
+        enabled: false
+  jnt:
+    order:
+      - cleanup
+      - integrate
+    transformers:
+      cleanup:
+        enabled: true
+      integrate:
+        enabled: true
+    virtualize:
+      enabled: false
+      chance: 100
+    intrinsic: false
+    traceless: false
