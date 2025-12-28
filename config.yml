@@ -23,10 +23,6 @@ debug:
 jnt-path: war/jnt
 mutators:
   metaphor:
-    exempt:
-      - package: '*'
-        classes:
-          - class: 'so/jnt/suite/HashmapTest'
     order:
       - renamer.method
       - renamer.field
