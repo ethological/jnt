@@ -43,7 +43,45 @@ public class JRemapper extends Remapper {
     }
 
     public String mapFieldName(String owner, String name, String descriptor) {
-        String remappedName = this.map(owner + '.' + name + descriptor);
+        String key = owner + '.' + name + descriptor;
+        String remappedName = this.map(key);
+        
+        // If not found, walk up the full class hierarchy (superclasses AND interfaces)
+        // to find where the field is actually defined
+        if (remappedName == null) {
+            Set<String> visited = new HashSet<>();
+            Deque<String> queue = new ArrayDeque<>();
+            queue.add(owner);
+            
+            while (!queue.isEmpty() && remappedName == null) {
+                String current = queue.poll();
+                if (current == null || !visited.add(current)) continue;
+                
+                JClassNode node = ObfuscatorContext.INSTANCE.loadClass(current);
+                if (node == null) continue;
+                
+                if (node.superName != null && !visited.contains(node.superName)) {
+                    key = node.superName + '.' + name + descriptor;
+                    remappedName = this.map(key);
+                    if (remappedName == null) {
+                        queue.add(node.superName);
+                    }
+                }
+                
+                // Check all interfaces (this is where Imports.mc lives (example in my case))
+                if (remappedName == null && node.interfaces != null) {
+                    for (String iface : node.interfaces) {
+                        if (iface != null && !visited.contains(iface)) {
+                            key = iface + '.' + name + descriptor;
+                            remappedName = this.map(key);
+                            if (remappedName != null) break;
+                            queue.add(iface);
+                        }
+                    }
+                }
+            }
+        }
+        
         return remappedName == null ? name : remappedName;
     }
 
